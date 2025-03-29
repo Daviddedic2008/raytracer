@@ -10,8 +10,6 @@ vec3 ray::intersectingTriangle(triangle t) const{
     
     const float directionDotNormal = dot(direction, t.normalVector);
 
-    
-
     if (fabs(directionDotNormal) < 1e-8) {
         return vec3(0, 0, 0);
     }

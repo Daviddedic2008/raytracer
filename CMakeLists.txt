@@ -12,7 +12,7 @@ endif()
 project ("raytracerFinishedCPU")
 
 # Add source to this project's executable.
-add_executable (raytracerFinishedCPU "main.cpp" "main.h" "tracer/fileIO/writeToBMP.cpp" "tracer/structs/ray.cpp" "tracer/structs/utils/rng.cpp" "tracer/structs/vectors.cpp" "tracer/structs/color.cpp" "tracer/structs/shapes.cpp" "tracer/structs/screen.cpp" "tracer/structs/screen.h")
+add_executable (raytracerFinishedCPU "main.cpp" "main.h" "tracer/fileIO/writeToBMP.cpp" "tracer/structs/ray.cpp" "tracer/structs/utils/rng.cpp" "tracer/structs/vectors.cpp" "tracer/structs/color.cpp" "tracer/structs/shapes.cpp" "tracer/structs/screen.cpp" "tracer/structs/screen.h" "scene/sceneManager.cpp" "scene/sceneManager.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET raytracerFinishedCPU PROPERTY CXX_STANDARD 20)
