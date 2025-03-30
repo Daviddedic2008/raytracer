@@ -12,6 +12,7 @@ struct color {
 	color operator/(const color c) const;
 	color operator-(const color c) const;
 	void operator*=(const color c);
+	void operator*=(const float scl);
 	void operator+=(const color c);
 	void operator/=(const color c);
 	void operator-=(const color c);

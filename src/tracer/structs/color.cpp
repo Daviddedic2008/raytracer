@@ -22,6 +22,12 @@ void color::operator*=(const color c) {
 	b *= c.b;
 }
 
+void color::operator*=(const float scl) {
+	r *= scl;
+	g *= scl;
+	b *= scl;
+}
+
 void color::operator+=(const color c) {
 	r += c.r;
 	g += c.g;
