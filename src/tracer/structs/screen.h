@@ -11,4 +11,8 @@ void writeToImageBuffer(const color c, const int px, const int py);
 
 color readFromImageBuffer(const int px, const int py);
 
+void addToImageBuffer(const color c, const int px, const int py);
+
+void scaleImageBuffer(const float scl, const int px, const int py);
+
 void flipBufferToBMP();

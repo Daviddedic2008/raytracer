@@ -15,6 +15,14 @@ void writeToImageBuffer(const color c, const int px, const int py) {
 	displayBuffer[px + py * scrWidth] = c;
 }
 
+void addToImageBuffer(const color c, const int px, const int py) {
+	displayBuffer[px + py * scrWidth] += c;
+}
+
+void scaleImageBuffer(const float scl, const int px, const int py) {
+	displayBuffer[px + py * scrWidth] *= scl;
+}
+
 color readFromImageBuffer(const int px, const int py) {
 	return displayBuffer[px + py * scrWidth];
 }

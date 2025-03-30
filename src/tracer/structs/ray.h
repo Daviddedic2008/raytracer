@@ -17,6 +17,8 @@ struct ray {
 
 	ray(const vec3 o, const float fov, const float blurStrength);
 
+	void returnToOrigin(const vec3 o, const float fov, const float blurStrength);
+
 	ray(){}
 
 	vec3 intersectingTriangle(triangle t) const;

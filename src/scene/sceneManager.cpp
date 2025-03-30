@@ -3,7 +3,7 @@
 
 ray* rays;
 
-std::list<triangle> triangles;
+std::vector<triangle> triangles;
 
 #include "../tracer/structs/screen.h"
 
@@ -12,10 +12,21 @@ int numTriangles = 0;
 
 void initializeRays(const float fov, const float blurStrength) {
 	rays = new ray[scrHeight * scrWidth];
+}
 
+void resetRayPositions(const float fov, const float blurStrength) {
 	for (int x = scrWidth / -2; x < scrWidth / 2; x++) {
 		for (int y = scrHeight / -2; y < scrHeight / 2; y++) {
-			rays[x + y * scrWidth] = ray(vec3(x, y, 0), fov, blurStrength);
+			rays[x + scrWidth / 2 + (y + scrHeight / 2) * scrWidth].returnToOrigin(vec3(x, y, 0), fov, blurStrength);
+		}
+	}
+}
+
+void resetRayBounces(const float fov, const float blurStrength) {
+	for (int x = scrWidth / -2; x < scrWidth / 2; x++) {
+		for (int y = scrHeight / -2; y < scrHeight / 2; y++) {
+			rays[x + scrWidth / 2 + (y + scrHeight / 2) * scrWidth].numBounces = 0;
+			rays[x + scrWidth / 2 + (y + scrHeight / 2) * scrWidth].maxBrightness = 0;
 		}
 	}
 }
@@ -25,6 +36,11 @@ void cycleRays(const int bounceLimit) {
 		for (int b = 0; b < bounceLimit; b++) {
 			for (auto t = triangles.begin(); t != triangles.end(); t++) {
 				rays[r].attemptFullTrace(*t);
+
+				if (rays[r].maxBrightness > 0.0f) {
+					rays[r].c *= rays[r].maxBrightness;
+					break;
+				}
 			}
 		}
 	}
@@ -34,7 +50,7 @@ void cycleRaysVector(const int bounceLimit, const std::vector<triangle>& triangl
 	for (int r = 0; r < scrWidth * scrHeight; r++) {
 		for (int b = 0; b < bounceLimit; b++) {
 			for (auto t = triangleVector.begin(); t != triangleVector.end(); t++) {
-				rays[r].attemptFullTrace(*t);
+				const int i = rays[r].attemptFullTrace(*t);
 			}
 		}
 	}

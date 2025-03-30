@@ -3,8 +3,13 @@
 #include "../tracer/structs/shapes.h"
 #include "../tracer/structs/ray.h"
 #include "../tracer/structs/color.h"
+#include "../tracer/structs/screen.h"
 
 void initializeRays(const float fov, const float blurStrength);
+
+void resetRayPositions(const float fov, const float blurStrength);
+
+void resetRayBounces(const float fov, const float blurStrength);
 
 void cycleRays(const int bounceLimit);
 
@@ -19,5 +24,7 @@ void addFacet(const vec3& corner1, const vec3& corner2, const vec3& normal, cons
 void addRectangularPrism(const vec3& corner1, const vec3& corner2, const color& c, const float brightness, const float roughness);
 
 extern ray* rays;
+
+extern std::vector<triangle> triangles;
 
 extern int bounceLimit;

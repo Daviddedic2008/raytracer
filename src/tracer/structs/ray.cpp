@@ -2,14 +2,18 @@
 #include "utils/rng.h"
 #include <random>
 
-ray::ray(const vec3 o, const float fov, const float blurStrength) : origin(o) {
-    direction = o * fov + vec3(randFloat(), randFloat(), 0.0f) * blurStrength;
+ray::ray(const vec3 o, const float fov, const float blurStrength) : origin(o), numBounces(0), maxBrightness(0.0f) {
+    direction = o * fov + vec3(randFloat(), randFloat(), 0.0f) * blurStrength + vec3(0,0,1);
+}
+
+void ray::returnToOrigin(const vec3 o, const float fov, const float blurStrength) {
+    direction = o * fov + vec3(randFloat(), randFloat(), 0.0f) * blurStrength + vec3(0, 0, 1);
+    origin = o;
 }
 
 vec3 ray::intersectingTriangle(triangle t) const{
     
     const float directionDotNormal = dot(direction, t.normalVector);
-
     if (fabs(directionDotNormal) < 1e-8) {
         return vec3(0, 0, 0);
     }
@@ -17,13 +21,8 @@ vec3 ray::intersectingTriangle(triangle t) const{
     const float d = dot(t.normalVector, t.p1);
     const float tDistance = (dot(t.normalVector, origin) + d) / directionDotNormal;
 
-    if (fabs(tDistance) < 1e-8) {
-        return vec3(0, 0, 0);
-    }
-
     const vec3 intersectionPoint = origin + direction * tDistance;
-
-    if (dot(intersectionPoint, direction) < 0.0f) {
+    if (dot(intersectionPoint, direction) <= 1e-8) {
         return vec3(0, 0, 0);
     }
 
@@ -55,9 +54,10 @@ bool ray::attemptFullTrace(const triangle t) {
         return false;
     }
 
-    this->origin = intersect;
-    this->reflectOnTriangle(t, t.roughness);
-    this->c *= t.c;
-
+    origin = intersect;
+    reflectOnTriangle(t, t.roughness);
+    c *= t.c;
+    maxBrightness = (maxBrightness < t.brightness) ? t.brightness : maxBrightness;
+    numBounces++;
     return true;
 }
