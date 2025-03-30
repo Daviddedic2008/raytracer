@@ -1,7 +1,5 @@
 #pragma once
 
-#include "shapes.h"
-
 #include "vectors.h"
 
 #include "color.h"

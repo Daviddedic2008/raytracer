@@ -23,11 +23,29 @@ vec3 ray::intersectingTriangle(triangle t) const{
 
     const vec3 intersectionPoint = origin + direction * tDistance;
 
+    if (dot(intersectionPoint, direction) < 0.0f) {
+        return vec3(0, 0, 0);
+    }
+
     return t.pointInTriangle(intersectionPoint) ? intersectionPoint : vec3(0, 0, 0);
 }
 
-void ray::reflectOnTriangle(const triangle t) {
-    direction.reflect(t.normalVector);
+void ray::reflectOnTriangle(const triangle t, float randomContribution) {
+    const float dtnv = dot(t.normalVector, direction);
+
+    const vec3 nv = (dtnv > 0.0f) ? (t.normalVector * -1) : t.normalVector;
+    direction.reflect(nv);
+
+    direction *= (1 - randomContribution);
+
+    const vec3 rnd = generateRandomPointSphere();
+    direction += rnd * randomContribution;
+
+    const float dt2 = dot(t.normalVector, direction);
+
+    if (dt2 > 0.0f) {
+        direction *= -1;
+    }
 }
 
 bool ray::attemptFullTrace(const triangle t) {
@@ -38,7 +56,8 @@ bool ray::attemptFullTrace(const triangle t) {
     }
 
     this->origin = intersect;
-    this->reflectOnTriangle(t);
+    this->reflectOnTriangle(t, t.roughness);
     this->c *= t.c;
+
     return true;
 }

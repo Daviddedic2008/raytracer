@@ -7,12 +7,14 @@ float vec3::magnitude() const{
 	return sqrtf(x * x + y * y + z * z);
 }
 
-void vec3::normalize() {
+vec3 vec3::normalize() {
 	const float scl = this->magnitude();
 
 	x /= scl;
 	y /= scl;
 	z /= scl;
+
+	return *this;
 }
 
 vec3 vec3::operator+(const vec3& v2) const {
@@ -78,10 +80,26 @@ void vec3::reflect(const vec3& normalVector) {
 	 this->operator*(-1);
 }
 
-vec3 generateRandomPointSphere(const vec3 center, const float radius) {
+vec3 generateRandomPointSphere() {
 	std::random_device rd;
-	std::normal_distribution<float> nd(-radius, radius);
 	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f); // Azimuthal angle
+	std::uniform_real_distribution<float> cosThetaDist(-1.0f, 1.0f);    // Cosine of polar angle
 
-	return vec3(nd(gen), nd(gen), nd(gen));
+	// Randomly sample spherical coordinates
+	float cosTheta = cosThetaDist(gen); // Cosine of polar angle
+	float sinTheta = std::sqrt(1.0f - cosTheta * cosTheta); // Sine of polar angle
+	float phi = angleDist(gen); // Azimuthal angle
+
+	// Convert spherical coordinates to Cartesian coordinates
+	float x = sinTheta * std::cos(phi);
+	float y = sinTheta * std::sin(phi);
+	float z = cosTheta;
+
+	// Return the point shifted by the center
+	return vec3(x, y, z);
+}
+
+void vec3::print() {
+	printf("%f %f %f\n", x, y, z);
 }

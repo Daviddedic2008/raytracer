@@ -1,5 +1,5 @@
 #include "screen.h"
-#include "C:\Users\david\OneDrive\Documents\raytracerFinishedCPU\tracer\fileIO\writeToBMP.h"
+#include "../fileIO/writeToBMP.h"
 
 int scrWidth, scrHeight;
 
