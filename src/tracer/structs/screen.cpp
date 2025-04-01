@@ -28,5 +28,5 @@ color readFromImageBuffer(const int px, const int py) {
 }
 
 void flipBufferToBMP() {
-	saveBMP("outImg.bmp", scrWidth, scrHeight, displayBuffer);
+	saveBMP("C:\\Users\\david\\OneDrive\\Documents\\raytracerFinishedCPU\\src\\tracer\\fileIO\\outImg.bmp", scrWidth, scrHeight, displayBuffer);
 }
